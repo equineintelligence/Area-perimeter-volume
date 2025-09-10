@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐴 Horse Ranch Math Adventure! 🐴</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #87CEEB 0%, #90EE90 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            color: white;
+            text-align: center;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '🐎';
+            position: absolute;
+            font-size: 3em;
+            animation: bounce 2s infinite;
+            left: 50px;
+            top: 20px;
+        }
+
+        .header::after {
+            content: '🏇';
+            position: absolute;
+            font-size: 3em;
+            animation: bounce 2s infinite 0.5s;
+            right: 50px;
+            top: 20px;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #f0f0f0;
+            border-bottom: 3px solid #4ECDC4;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            background: #e0e0e0;
+            border: none;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .tab:hover {
+            background: #d0d0d0;
+            transform: translateY(-2px);
+        }
+
+        .tab.active {
+            background: #4ECDC4;
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .content {
+            padding: 30px;
+            min-height: 400px;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .formula-box {
+            background: linear-gradient(45deg, #FFE066, #FF9A9E);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 3px dashed #FF6B6B;
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .formula-box::before {
+            content: '✨';
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            animation: sparkle 1.5s infinite;
+        }
+
+        .formula-box::after {
+            content: '✨';
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            animation: sparkle 1.5s infinite 0.7s;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(1.2); }
+        }
+
+        .example-box {
+            background: #E8F8F5;
+            border-left: 5px solid #4ECDC4;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        .quiz-container {
+            background: #FFF3CD;
+            border: 2px solid #FFC107;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .quiz-container::before {
+            content: '🤔';
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: #FFC107;
+            padding: 10px;
+            border-radius: 50%;
+            font-size: 1.5em;
+        }
+
+        .question {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #856404;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .option {
+            background: #FFFFFF;
+            border: 2px solid #4ECDC4;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .option:hover {
+            background: #4ECDC4;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .option.correct {
+            background: #28A745;
+            color: white;
+            animation: correctAnswer 0.6s ease;
+        }
+
+        .option.incorrect {
+            background: #DC3545;
+            color: white;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes correctAnswer {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .calculator {
+            background: #F8F9FA;
+            border: 2px solid #6C757D;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .calculator input {
+            width: 80px;
+            padding: 8px;
+            margin: 5px;
+            border: 2px solid #4ECDC4;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        .calc-button {
+            background: #4ECDC4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin: 10px 5px;
+            transition: all 0.3s;
+        }
+
+        .calc-button:hover {
+            background: #45B7AA;
+            transform: translateY(-2px);
+        }
+
+        .result {
+            background: #D4EDDA;
+            border: 2px solid #28A745;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+            display: none;
+        }
+
+        .memory-game {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            max-width: 400px;
+            margin: 20px auto;
+        }
+
+        .memory-card {
+            background: #4ECDC4;
+            border: none;
+            border-radius: 10px;
+            padding: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-height: 80px;
+        }
+
+        .memory-card:hover {
+            background: #45B7AA;
+            transform: scale(1.05);
+        }
+
+        .memory-card.flipped {
+            background: #FFE066;
+            color: #333;
+        }
+
+        .memory-card.matched {
+            background: #28A745;
+            color: white;
+        }
+
+        .score {
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #4ECDC4;
+            margin: 20px 0;
+        }
+
+        .encouragement {
+            text-align: center;
+            font-size: 1.3em;
+            color: #FF6B6B;
+            font-weight: bold;
+            margin: 20px 0;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .fun-fact {
+            background: linear-gradient(45deg, #FFB6C1, #FFE4E1);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px dashed #FF69B4;
+            position: relative;
+        }
+
+        .fun-fact::before {
+            content: '🤓';
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: #FF69B4;
+            padding: 8px;
+            border-radius: 50%;
+            font-size: 1.2em;
+        }
+
+        .interactive-demo {
+            background: #E3F2FD;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .shape-demo {
+            width: 200px;
+            height: 150px;
+            margin: 20px auto;
+            border: 3px solid #2196F3;
+            border-radius: 10px;
+            background: rgba(33, 150, 243, 0.1);
+            transition: all 0.3s;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .shape-demo:hover {
+            background: rgba(33, 150, 243, 0.3);
+            transform: scale(1.1);
+        }
+
+        .shape-info {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: bold;
+            color: #2196F3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🐴 Horse Ranch Math Adventure! 🐴</h1>
+            <p>Learn Area, Perimeter & Volume with your horse friends!</p>
+        </header>
+
+        <nav class="nav-tabs">
+            <button class="tab active" onclick="showSection('perimeter')">🏃‍♀️ Perimeter</button>
+            <button class="tab" onclick="showSection('area')">🏠 Area</button>
+            <button class="tab" onclick="showSection('volume')">📦 Volume</button>
+            <button class="tab" onclick="showSection('games')">🎮 Games</button>
+        </nav>
+
+        <div class="content">
+            <!-- PERIMETER SECTION -->
+            <div id="perimeter" class="section active">
+                <h2>🏃‍♀️ Perimeter - Going Around the Edge!</h2>
+                <p><strong>Perimeter = the distance around the outside edge of a shape</strong></p>
+                <p>Think of it like galloping around a fence - you're measuring how far you gallop! 🐎</p>
+
+                <div class="formula-box">
+                    <strong>Rectangle:</strong> P = 2 × (length + width)<br>
+                    <strong>Square:</strong> P = 4 × side<br>
+                    <strong>Triangle:</strong> P = side₁ + side₂ + side₃<br>
+                    <strong>Circle:</strong> P = 2 × π × radius (π ≈ 3.14)<br>
+                    <strong>Regular Polygon:</strong> P = number of sides × side length
+                </div>
+
+                <div class="example-box">
+                    <strong>🐴 Rectangle - Starlight's Paddock:</strong><br>
+                    20m long and 15m wide: P = 2 × (20 + 15) = 70m<br><br>
+                    
+                    <strong>🐴 Square - Thunder's Stable:</strong><br>
+                    Each side is 8m: P = 4 × 8 = 32m<br><br>
+                    
+                    <strong>🐴 Triangle - Spirit's Training Area:</strong><br>
+                    Sides: 12m, 15m, 18m: P = 12 + 15 + 18 = 45m<br><br>
+                    
+                    <strong>🐴 Circle - Moonbeam's Round Pen:</strong><br>
+                    Radius 10m: P = 2 × 3.14 × 10 = 62.8m
+                </div>
+
+                <div class="calculator">
+                    <h3>🧮 Multi-Shape Perimeter Calculator</h3>
+                    <label>Shape: 
+                        <select id="perimShape" onchange="updatePerimeterInputs()">
+                            <option value="rectangle">Rectangle</option>
+                            <option value="square">Square</option>
+                            <option value="triangle">Triangle</option>
+                            <option value="circle">Circle</option>
+                            <option value="hexagon">Regular Hexagon</option>
+                        </select>
+                    </label>
+                    <div id="perimInputs">
+                        <label>Length: <input type="number" id="perimLength" placeholder="20"></label>
+                        <label>Width: <input type="number" id="perimWidth" placeholder="15"></label>
+                    </div>
+                    <button class="calc-button" onclick="calculatePerimeter()">Calculate Perimeter!</button>
+                    <div id="perimResult" class="result"></div>
+                </div>
+
+                <div class="quiz-container">
+                    <div class="question" id="perimQuizQuestion">Thunder's square stable has sides of 8m. What's the perimeter?</div>
+                    <div class="options" id="perimQuizOptions">
+                        <div class="option" onclick="checkAnswer(this, false)">16m</div>
+                        <div class="option" onclick="checkAnswer(this, true)">32m</div>
+                        <div class="option" onclick="checkAnswer(this, false)">24m</div>
+                        <div class="option" onclick="checkAnswer(this, false)">64m</div>
+                    </div>
+                    <button class="calc-button" onclick="generatePerimeterQuiz()">New Question!</button>
+                </div>
+
+                <div class="fun-fact">
+                    <h4>Fun Facts!</h4>
+                    • A football field perimeter is about 400m! 🏟️<br>
+                    • The Earth's equator (biggest circle) is 40,075km around! 🌍<br>
+                    • A regular hexagon (like a stop sign) has 6 equal sides! 🛑
+                </div>
+            </div>
+
+            <!-- AREA SECTION -->
+            <div id="area" class="section">
+                <h2>🏠 Area - Covering the Surface!</h2>
+                <p><strong>Area = how much space inside a shape</strong></p>
+                <p>Think of it like putting hay on the ground - how much hay do you need to cover the space? 🌾</p>
+
+                <div class="formula-box">
+                    <strong>Rectangle:</strong> A = length × width<br>
+                    <strong>Square:</strong> A = side × side = side²<br>
+                    <strong>Triangle:</strong> A = ½ × base × height<br>
+                    <strong>Circle:</strong> A = π × radius² (π ≈ 3.14)<br>
+                    <strong>Trapezoid:</strong> A = ½ × (top + bottom) × height<br>
+                    <strong>Parallelogram:</strong> A = base × height
+                </div>
+
+                <div class="example-box">
+                    <strong>🐴 Rectangle - Moonbeam's Pasture:</strong><br>
+                    30m × 20m: A = 30 × 20 = 600m²<br><br>
+                    
+                    <strong>🐴 Square - Thunder's Pen:</strong><br>
+                    Side = 12m: A = 12² = 144m²<br><br>
+                    
+                    <strong>🐴 Triangle - Blaze's Training Corner:</strong><br>
+                    Base = 16m, Height = 10m: A = ½ × 16 × 10 = 80m²<br><br>
+                    
+                    <strong>🐴 Circle - Spirit's Round Arena:</strong><br>
+                    Radius = 15m: A = 3.14 × 15² = 706.5m²<br><br>
+                    
+                    <strong>🐴 L-Shaped - Dakota's Complex Pasture:</strong><br>
+                    Main area (25×15) + Extension (10×8) = 375 + 80 = 455m²
+                </div>
+
+                <div class="calculator">
+                    <h3>🧮 Multi-Shape Area Calculator</h3>
+                    <label>Shape: 
+                        <select id="areaShape" onchange="updateAreaInputs()">
+                            <option value="rectangle">Rectangle</option>
+                            <option value="square">Square</option>
+                            <option value="triangle">Triangle</option>
+                            <option value="circle">Circle</option>
+                            <option value="trapezoid">Trapezoid</option>
+                            <option value="lshape">L-Shape</option>
+                        </select>
+                    </label>
+                    <div id="areaInputs">
+                        <label>Length: <input type="number" id="areaLength" placeholder="30"></label>
+                        <label>Width: <input type="number" id="areaWidth" placeholder="20"></label>
+                    </div>
+                    <button class="calc-button" onclick="calculateArea()">Calculate Area!</button>
+                    <div id="areaResult" class="result"></div>
+                </div>
+
+                <div class="quiz-container">
+                    <div class="question" id="areaQuizQuestion">Spirit's square pen has an area of 64m². What's the length of each side?</div>
+                    <div class="options" id="areaQuizOptions">
+                        <div class="option" onclick="checkAnswer(this, true)">8m</div>
+                        <div class="option" onclick="checkAnswer(this, false)">16m</div>
+                        <div class="option" onclick="checkAnswer(this, false)">32m</div>
+                        <div class="option" onclick="checkAnswer(this, false)">4m</div>
+                    </div>
+                    <button class="calc-button" onclick="generateAreaQuiz()">New Question!</button>
+                </div>
+
+                <div class="fun-fact">
+                    <h4>Fun Facts!</h4>
+                    • A football field has an area of about 5,400m²! ⚽<br>
+                    • The largest pizza ever made was 1,261m²! 🍕<br>
+                    • A triangle's area is always half of a rectangle with the same base and height! 📐
+                </div>
+            </div>
+
+            <!-- VOLUME SECTION -->
+            <div id="volume" class="section">
+                <h2>📦 Volume - Filling Up Space!</h2>
+                <p><strong>Volume = how much space inside a 3D object</strong></p>
+                <p>Think of it like filling a stable with hay bales - how many bales fit inside? 📦</p>
+
+                <div class="formula-box">
+                    <strong>Rectangular Prism:</strong> V = length × width × height<br>
+                    <strong>Cube:</strong> V = edge³<br>
+                    <strong>Cylinder:</strong> V = π × radius² × height<br>
+                    <strong>Triangular Prism:</strong> V = ½ × base × height × length<br>
+                    <strong>Sphere:</strong> V = ⁴⁄₃ × π × radius³<br>
+                    <strong>Cone:</strong> V = ⅓ × π × radius² × height
+                </div>
+
+                <div class="example-box">
+                    <strong>🐴 Rectangular Prism - Blaze's Hay Barn:</strong><br>
+                    15m × 10m × 6m: V = 15 × 10 × 6 = 900m³<br><br>
+                    
+                    <strong>🐴 Cube - Thunder's Feed Container:</strong><br>
+                    Edge = 4m: V = 4³ = 64m³<br><br>
+                    
+                    <strong>🐴 Cylinder - Spirit's Water Tank:</strong><br>
+                    Radius = 3m, Height = 8m: V = 3.14 × 3² × 8 = 226.08m³<br><br>
+                    
+                    <strong>🐴 Triangular Prism - Moonbeam's Shelter:</strong><br>
+                    Base = 6m, Height = 4m, Length = 10m: V = ½ × 6 × 4 × 10 = 120m³<br><br>
+                    
+                    <strong>🐴 Sphere - Dakota's Exercise Ball:</strong><br>
+                    Radius = 2m: V = ⁴⁄₃ × 3.14 × 2³ = 33.49m³
+                </div>
+
+                <div class="calculator">
+                    <h3>🧮 Multi-Shape Volume Calculator</h3>
+                    <label>Shape: 
+                        <select id="volumeShape" onchange="updateVolumeInputs()">
+                            <option value="rectangular">Rectangular Prism</option>
+                            <option value="cube">Cube</option>
+                            <option value="cylinder">Cylinder</option>
+                            <option value="triangular">Triangular Prism</option>
+                            <option value="sphere">Sphere</option>
+                            <option value="cone">Cone</option>
+                        </select>
+                    </label>
+                    <div id="volumeInputs">
+                        <label>Length: <input type="number" id="volLength" placeholder="15"></label>
+                        <label>Width: <input type="number" id="volWidth" placeholder="10"></label>
+                        <label>Height: <input type="number" id="volHeight" placeholder="6"></label>
+                    </div>
+                    <button class="calc-button" onclick="calculateVolume()">Calculate Volume!</button>
+                    <div id="volResult" class="result"></div>
+                </div>
+
+                <div class="quiz-container">
+                    <div class="question" id="volumeQuizQuestion">A cube-shaped feed container has edges of 4m. What's its volume?</div>
+                    <div class="options" id="volumeQuizOptions">
+                        <div class="option" onclick="checkAnswer(this, false)">16m³</div>
+                        <div class="option" onclick="checkAnswer(this, false)">48m³</div>
+                        <div class="option" onclick="checkAnswer(this, true)">64m³</div>
+                        <div class="option" onclick="checkAnswer(this, false)">12m³</div>
+                    </div>
+                    <button class="calc-button" onclick="generateVolumeQuiz()">New Question!</button>
+                </div>
+
+                <div class="fun-fact">
+                    <h4>Fun Facts!</h4>
+                    • An average horse stable is about 100m³! 🏠<br>
+                    • A cylinder (like a silo) can hold more than a box with the same base! 🌾<br>
+                    • A sphere holds the most volume for its surface area! ⚽<br>
+                    • The Great Pyramid has a volume of 2.6 million m³! 🏺
+                </div>
+            </div>
+
+            <!-- GAMES SECTION -->
+            <div id="games" class="section">
+                <h2>🎮 Math Games!</h2>
+                
+                <div class="quiz-container">
+                    <h3>🧠 Formula Memory Match!</h3>
+                    <p>Match the formulas with their shapes!</p>
+                    <div class="memory-game" id="memoryGame">
+                        <!-- Cards will be generated by JavaScript -->
+                    </div>
+                    <div class="score" id="memoryScore">Matches: 0 | Tries: 0</div>
+                    <button class="calc-button" onclick="resetMemoryGame()">New Game!</button>
+                </div>
+
+                <div class="quiz-container">
+                    <h3>🏇 Quick Quiz Challenge!</h3>
+                    <div id="quickQuiz">
+                        <div class="question" id="quizQuestion">Loading question...</div>
+                        <div class="options" id="quizOptions">
+                            <!-- Options will be generated by JavaScript -->
+                        </div>
+                        <div class="score" id="quizScore">Score: 0 | Question: 1</div>
+                    </div>
+                    <button class="calc-button" onclick="generateQuizQuestion()">Next Question!</button>
+                </div>
+
+                <div class="encouragement" id="encouragement">
+                    🌟 You're doing amazing! Keep practicing! 🌟
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentScore = 0;
+        let currentQuestion = 1;
+        let memoryMatches = 0;
+        let memoryTries = 0;
+        let memoryFlippedCards = [];
+
+        // Show section function
+        function showSection(sectionName) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected section
+            document.getElementById(sectionName).classList.add('active');
+            
+            // Add active class to selected tab
+            event.target.classList.add('active');
+        }
+
+        // Calculator functions
+        function updatePerimeterInputs() {
+            const shape = document.getElementById('perimShape').value;
+            const inputsDiv = document.getElementById('perimInputs');
+            
+            switch(shape) {
+                case 'rectangle':
+                    inputsDiv.innerHTML = `
+                        <label>Length: <input type="number" id="perimLength" placeholder="20"></label>
+                        <label>Width: <input type="number" id="perimWidth" placeholder="15"></label>
+                    `;
+                    break;
+                case 'square':
+                    inputsDiv.innerHTML = `
+                        <label>Side: <input type="number" id="perimSide" placeholder="8"></label>
+                    `;
+                    break;
+                case 'triangle':
+                    inputsDiv.innerHTML = `
+                        <label>Side 1: <input type="number" id="perimSide1" placeholder="12"></label>
+                        <label>Side 2: <input type="number" id="perimSide2" placeholder="15"></label>
+                        <label>Side 3: <input type="number" id="perimSide3" placeholder="18"></label>
+                    `;
+                    break;
+                case 'circle':
+                    inputsDiv.innerHTML = `
+                        <label>Radius: <input type="number" id="perimRadius" placeholder="10"></label>
+                    `;
+                    break;
+                case 'hexagon':
+                    inputsDiv.innerHTML = `
+                        <label>Side Length: <input type="number" id="perimSide" placeholder="5"></label>
+                    `;
+                    break;
+            }
+        }
+
+        function updateAreaInputs() {
+            const shape = document.getElementById('areaShape').value;
+            const inputsDiv = document.getElementById('areaInputs');
+            
+            switch(shape) {
+                case 'rectangle':
+                    inputsDiv.innerHTML = `
+                        <label>Length: <input type="number" id="areaLength" placeholder="30"></label>
+                        <label>Width: <input type="number" id="areaWidth" placeholder="20"></label>
+                    `;
+                    break;
+                case 'square':
+                    inputsDiv.innerHTML = `
+                        <label>Side: <input type="number" id="areaSide" placeholder="12"></label>
+                    `;
+                    break;
+                case 'triangle':
+                    inputsDiv.innerHTML = `
+                        <label>Base: <input type="number" id="areaBase" placeholder="16"></label>
+                        <label>Height: <input type="number" id="areaHeight" placeholder="10"></label>
+                    `;
+                    break;
+                case 'circle':
+                    inputsDiv.innerHTML = `
+                        <label>Radius: <input type="number" id="areaRadius" placeholder="15"></label>
+                    `;
+                    break;
+                case 'trapezoid':
+                    inputsDiv.innerHTML = `
+                        <label>Top: <input type="number" id="areaTop" placeholder="8"></label>
+                        <label>Bottom: <input type="number" id="areaBottom" placeholder="12"></label>
+                        <label>Height: <input type="number" id="areaHeight" placeholder="6"></label>
+                    `;
+                    break;
+                case 'lshape':
+                    inputsDiv.innerHTML = `
+                        <label>Main Length: <input type="number" id="areaLength1" placeholder="25"></label>
+                        <label>Main Width: <input type="number" id="areaWidth1" placeholder="15"></label>
+                        <label>Extension Length: <input type="number" id="areaLength2" placeholder="10"></label>
+                        <label>Extension Width: <input type="number" id="areaWidth2" placeholder="8"></label>
+                    `;
+                    break;
+            }
+        }
+
+        function updateVolumeInputs() {
+            const shape = document.getElementById('volumeShape').value;
+            const inputsDiv = document.getElementById('volumeInputs');
+            
+            switch(shape) {
+                case 'rectangular':
+                    inputsDiv.innerHTML = `
+                        <label>Length: <input type="number" id="volLength" placeholder="15"></label>
+                        <label>Width: <input type="number" id="volWidth" placeholder="10"></label>
+                        <label>Height: <input type="number" id="volHeight" placeholder="6"></label>
+                    `;
+                    break;
+                case 'cube':
+                    inputsDiv.innerHTML = `
+                        <label>Edge: <input type="number" id="volEdge" placeholder="4"></label>
+                    `;
+                    break;
+                case 'cylinder':
+                    inputsDiv.innerHTML = `
+                        <label>Radius: <input type="number" id="volRadius" placeholder="3"></label>
+                        <label>Height: <input type="number" id="volHeight" placeholder="8"></label>
+                    `;
+                    break;
+                case 'triangular':
+                    inputsDiv.innerHTML = `
+                        <label>Base: <input type="number" id="volBase" placeholder="6"></label>
+                        <label>Height: <input type="number" id="volHeight" placeholder="4"></label>
+                        <label>Length: <input type="number" id="volLength" placeholder="10"></label>
+                    `;
+                    break;
+                case 'sphere':
+                    inputsDiv.innerHTML = `
+                        <label>Radius: <input type="number" id="volRadius" placeholder="2"></label>
+                    `;
+                    break;
+                case 'cone':
+                    inputsDiv.innerHTML = `
+                        <label>Radius: <input type="number" id="volRadius" placeholder="3"></label>
+                        <label>Height: <input type="number" id="volHeight" placeholder="9"></label>
+                    `;
+                    break;
+            }
+        }
+
+        function calculatePerimeter() {
+            const shape = document.getElementById('perimShape').value;
+            let result = 0;
+            let formula = '';
+            
+            switch(shape) {
+                case 'rectangle':
+                    const length = parseFloat(document.getElementById('perimLength').value);
+                    const width = parseFloat(document.getElementById('perimWidth').value);
+                    if (length && width) {
+                        result = 2 * (length + width);
+                        formula = `2 × (${length} + ${width}) = ${result}`;
+                    }
+                    break;
+                case 'square':
+                    const side = parseFloat(document.getElementById('perimSide').value);
+                    if (side) {
+                        result = 4 * side;
+                        formula = `4 × ${side} = ${result}`;
+                    }
+                    break;
+                case 'triangle':
+                    const side1 = parseFloat(document.getElementById('perimSide1').value);
+                    const side2 = parseFloat(document.getElementById('perimSide2').value);
+                    const side3 = parseFloat(document.getElementById('perimSide3').value);
+                    if (side1 && side2 && side3) {
+                        result = side1 + side2 + side3;
+                        formula = `${side1} + ${side2} + ${side3} = ${result}`;
+                    }
+                    break;
+                case 'circle':
+                    const radius = parseFloat(document.getElementById('perimRadius').value);
+                    if (radius) {
+                        result = 2 * Math.PI * radius;
+                        formula = `2 × π × ${radius} = ${result.toFixed(2)}`;
+                        result = result.toFixed(2);
+                    }
+                    break;
+                case 'hexagon':
+                    const hexSide = parseFloat(document.getElementById('perimSide').value);
+                    if (hexSide) {
+                        result = 6 * hexSide;
+                        formula = `6 × ${hexSide} = ${result}`;
+                    }
+                    break;
+            }
+            
+            if (result > 0) {
+                const resultDiv = document.getElementById('perimResult');
+                resultDiv.innerHTML = `🎉 ${formula} meters! 🎉`;
+                resultDiv.style.display = 'block';
+                celebrateCorrect();
+            }
+        }
+
+        function calculateArea() {
+            const shape = document.getElementById('areaShape').value;
+            let result = 0;
+            let formula = '';
+            
+            switch(shape) {
+                case 'rectangle':
+                    const length = parseFloat(document.getElementById('areaLength').value);
+                    const width = parseFloat(document.getElementById('areaWidth').value);
+                    if (length && width) {
+                        result = length * width;
+                        formula = `${length} × ${width} = ${result}`;
+                    }
+                    break;
+                case 'square':
+                    const side = parseFloat(document.getElementById('areaSide').value);
+                    if (side) {
+                        result = side * side;
+                        formula = `${side}² = ${result}`;
+                    }
+                    break;
+                case 'triangle':
+                    const base = parseFloat(document.getElementById('areaBase').value);
+                    const height = parseFloat(document.getElementById('areaHeight').value);
+                    if (base && height) {
+                        result = 0.5 * base * height;
+                        formula = `½ × ${base} × ${height} = ${result}`;
+                    }
+                    break;
+                case 'circle':
+                    const radius = parseFloat(document.getElementById('areaRadius').value);
+                    if (radius) {
+                        result = Math.PI * radius * radius;
+                        formula = `π × ${radius}² = ${result.toFixed(2)}`;
+                        result = result.toFixed(2);
+                    }
+                    break;
+                case 'trapezoid':
+                    const top = parseFloat(document.getElementById('areaTop').value);
+                    const bottom = parseFloat(document.getElementById('areaBottom').value);
+                    const trapHeight = parseFloat(document.getElementById('areaHeight').value);
+                    if (top && bottom && trapHeight) {
+                        result = 0.5 * (top + bottom) * trapHeight;
+                        formula = `½ × (${top} + ${bottom}) × ${trapHeight} = ${result}`;
+                    }
+                    break;
+                case 'lshape':
+                    const len1 = parseFloat(document.getElementById('areaLength1').value);
+                    const wid1 = parseFloat(document.getElementById('areaWidth1').value);
+                    const len2 = parseFloat(document.getElementById('areaLength2').value);
+                    const wid2 = parseFloat(document.getElementById('areaWidth2').value);
+                    if (len1 && wid1 && len2 && wid2) {
+                        const area1 = len1 * wid1;
+                        const area2 = len2 * wid2;
+                        result = area1 + area2;
+                        formula = `(${len1} × ${wid1}) + (${len2} × ${wid2}) = ${area1} + ${area2} = ${result}`;
+                    }
+                    break;
+            }
+            
+            if (result > 0) {
+                const resultDiv = document.getElementById('areaResult');
+                resultDiv.innerHTML = `🎉 ${formula} m²! 🎉`;
+                resultDiv.style.display = 'block';
+                celebrateCorrect();
+            }
+        }
+
+        function calculateVolume() {
+            const shape = document.getElementById('volumeShape').value;
+            let result = 0;
+            let formula = '';
+            
+            switch(shape) {
+                case 'rectangular':
+                    const length = parseFloat(document.getElementById('volLength').value);
+                    const width = parseFloat(document.getElementById('volWidth').value);
+                    const height = parseFloat(document.getElementById('volHeight').value);
+                    if (length && width && height) {
+                        result = length * width * height;
+                        formula = `${length} × ${width} × ${height} = ${result}`;
+                    }
+                    break;
+                case 'cube':
+                    const edge = parseFloat(document.getElementById('volEdge').value);
+                    if (edge) {
+                        result = edge * edge * edge;
+                        formula = `${edge}³ = ${result}`;
+                    }
+                    break;
+                case 'cylinder':
+                    const cylRadius = parseFloat(document.getElementById('volRadius').value);
+                    const cylHeight = parseFloat(document.getElementById('volHeight').value);
+                    if (cylRadius && cylHeight) {
+                        result = Math.PI * cylRadius * cylRadius * cylHeight;
+                        formula = `π × ${cylRadius}² × ${cylHeight} = ${result.toFixed(2)}`;
+                        result = result.toFixed(2);
+                    }
+                    break;
+                case 'triangular':
+                    const triBase = parseFloat(document.getElementById('volBase').value);
+                    const triHeight = parseFloat(document.getElementById('volHeight').value);
+                    const triLength = parseFloat(document.getElementById('volLength').value);
+                    if (triBase && triHeight && triLength) {
+                        result = 0.5 * triBase * triHeight * triLength;
+                        formula = `½ × ${triBase} × ${triHeight} × ${triLength} = ${result}`;
+                    }
+                    break;
+                case 'sphere':
+                    const sphRadius = parseFloat(document.getElementById('volRadius').value);
+                    if (sphRadius) {
+                        result = (4/3) * Math.PI * sphRadius * sphRadius * sphRadius;
+                        formula = `⁴⁄₃ × π × ${sphRadius}³ = ${result.toFixed(2)}`;
+                        result = result.toFixed(2);
+                    }
+                    break;
+                case 'cone':
+                    const coneRadius = parseFloat(document.getElementById('volRadius').value);
+                    const coneHeight = parseFloat(document.getElementById('volHeight').value);
+                    if (coneRadius && coneHeight) {
+                        result = (1/3) * Math.PI * coneRadius * coneRadius * coneHeight;
+                        formula = `⅓ × π × ${coneRadius}² × ${coneHeight} = ${result.toFixed(2)}`;
+                        result = result.toFixed(2);
+                    }
+                    break;
+            }
+            
+            if (result > 0) {
+                const resultDiv = document.getElementById('volResult');
+                resultDiv.innerHTML = `🎉 ${formula} m³! 🎉`;
+                resultDiv.style.display = 'block';
+                celebrateCorrect();
+            }
+        }
+
+        // Quiz functions
+        function checkAnswer(element, isCorrect) {
+            const options = element.parentElement.children;
+            
+            // Disable all options
+            Array.from(options).forEach(option => {
+                option.style.pointerEvents = 'none';
+            });
+            
+            if (isCorrect) {
+                element.classList.add('correct');
+                showEncouragement(['🎉 Excellent!', '🌟 Perfect!', '🏆 Amazing!', '🎊 Fantastic!']);
+                celebrateCorrect();
+            } else {
+                element.classList.add('incorrect');
+                // Show correct answer
+                Array.from(options).forEach(option => {
+                    if (option !== element && !option.classList.contains('incorrect')) {
+                        setTimeout(() => option.classList.add('correct'), 500);
+                    }
+                });
+                showEncouragement(['🤔 Try again!', '💪 Keep learning!', '🌈 Almost there!']);
+            }
+        }
+
+        // Enhanced quiz functions
+        const perimeterQuestions = [
+            {
+                question: "Thunder's square stable has sides of 8m. What's the perimeter?",
+                options: ["16m", "32m", "24m", "64m"],
+                correct: 1
+            },
+            {
+                question: "A triangular training area has sides of 10m, 12m, and 14m. What's the perimeter?",
+                options: ["36m", "26m", "30m", "42m"],
+                correct: 0
+            },
+            {
+                question: "Spirit's circular pen has a radius of 5m. What's the perimeter? (π = 3.14)",
+                options: ["31.4m", "15.7m", "20m", "25m"],
+                correct: 0
+            },
+            {
+                question: "A regular hexagon arena has sides of 6m each. What's the perimeter?",
+                options: ["24m", "30m", "36m", "42m"],
+                correct: 2
+            }
+        ];
+
+        const areaQuestions = [
+            {
+                question: "Spirit's square pen has an area of 64m². What's the length of each side?",
+                options: ["8m", "16m", "32m", "4m"],
+                correct: 0
+            },
+            {
+                question: "A triangular field has base 12m and height 8m. What's the area?",
+                options: ["48m²", "96m²", "20m²", "24m²"],
+                correct: 0
+            },
+            {
+                question: "A circular arena has radius 10m. What's the area? (π = 3.14)",
+                options: ["314m²", "62.8m²", "100m²", "628m²"],
+                correct: 0
+            },
+            {
+                question: "A trapezoid pasture has top 8m, bottom 12m, height 5m. What's the area?",
+                options: ["50m²", "40m²", "60m²", "100m²"],
+                correct: 0
+            }
+        ];
+
+        const volumeQuestions = [
+            {
+                question: "A cube-shaped feed container has edges of 4m. What's its volume?",
+                options: ["16m³", "48m³", "64m³", "12m³"],
+                correct: 2
+            },
+            {
+                question: "A cylindrical water tank has radius 3m and height 6m. What's the volume? (π = 3.14)",
+                options: ["169.56m³", "56.52m³", "18m³", "36m³"],
+                correct: 0
+            },
+            {
+                question: "A triangular prism shelter has base 8m, height 6m, length 10m. What's the volume?",
+                options: ["240m³", "480m³", "120m³", "80m³"],
+                correct: 0
+            },
+            {
+                question: "A spherical exercise ball has radius 1.5m. What's the volume? (π = 3.14)",
+                options: ["14.13m³", "28.26m³", "7.065m³", "21.2m³"],
+                correct: 0
+            }
+        ];
+
+        function generatePerimeterQuiz() {
+            const randomQ = perimeterQuestions[Math.floor(Math.random() * perimeterQuestions.length)];
+            document.getElementById('perimQuizQuestion').innerHTML = randomQ.question;
+            
+            const optionsContainer = document.getElementById('perimQuizOptions');
+            optionsContainer.innerHTML = '';
+            
+            randomQ.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.innerHTML = option;
+                optionDiv.onclick = () => checkAnswer(optionDiv, index === randomQ.correct);
+                optionsContainer.appendChild(optionDiv);
+            });
+        }
+
+        function generateAreaQuiz() {
+            const randomQ = areaQuestions[Math.floor(Math.random() * areaQuestions.length)];
+            document.getElementById('areaQuizQuestion').innerHTML = randomQ.question;
+            
+            const optionsContainer = document.getElementById('areaQuizOptions');
+            optionsContainer.innerHTML = '';
+            
+            randomQ.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.innerHTML = option;
+                optionDiv.onclick = () => checkAnswer(optionDiv, index === randomQ.correct);
+                optionsContainer.appendChild(optionDiv);
+            });
+        }
+
+        function generateVolumeQuiz() {
+            const randomQ = volumeQuestions[Math.floor(Math.random() * volumeQuestions.length)];
+            document.getElementById('volumeQuizQuestion').innerHTML = randomQ.question;
+            
+            const optionsContainer = document.getElementById('volumeQuizOptions');
+            optionsContainer.innerHTML = '';
+            
+            randomQ.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.innerHTML = option;
+                optionDiv.onclick = () => checkAnswer(optionDiv, index === randomQ.correct);
+                optionsContainer.appendChild(optionDiv);
+            });
+        }
+
+        // Memory game functions
+        function initializeMemoryGame() {
+            const cards = [
+                'P = 2×(l+w)', 'Rectangle Perimeter',
+                'A = l×w', 'Rectangle Area',
+                'V = l×w×h', 'Rectangular Prism',
+                'A = s²', 'Square Area',
+                'V = e³', 'Cube Volume',
+                'A = ½×b×h', 'Triangle Area',
+                'A = π×r²', 'Circle Area',
+                'V = π×r²×h', 'Cylinder Volume'
+            ];
+
+            const gameContainer = document.getElementById('memoryGame');
+            gameContainer.innerHTML = '';
+
+            // Shuffle cards
+            const shuffled = cards.sort(() => Math.random() - 0.5);
+
+            shuffled.forEach((card, index) => {
+                const cardElement = document.createElement('button');
+                cardElement.className = 'memory-card';
+                cardElement.innerHTML = '?';
+                cardElement.dataset.value = card;
+                cardElement.dataset.index = index;
+                cardElement.onclick = () => flipCard(cardElement);
+                gameContainer.appendChild(cardElement);
+            });
+        }
+
+        function flipCard(card) {
+            if (card.classList.contains('flipped') || card.classList.contains('matched')) return;
+            if (memoryFlippedCards.length >= 2) return;
+
+            card.classList.add('flipped');
+            card.innerHTML = card.dataset.value;
+            memoryFlippedCards.push(card);
+
+            if (memoryFlippedCards.length === 2) {
+                memoryTries++;
+                setTimeout(checkMemoryMatch, 1000);
+            }
+        }
+
+        function checkMemoryMatch() {
+            const [card1, card2] = memoryFlippedCards;
+            const matches = [
+                ['P = 2×(l+w)', 'Rectangle Perimeter'],
+                ['A = l×w', 'Rectangle Area'],
+                ['V = l×w×h', 'Rectangular Prism'],
+                ['A = s²', 'Square Area'],
+                ['V = e³', 'Cube Volume'],
+                ['A = ½×b×h', 'Triangle Area'],
+                ['A = π×r²', 'Circle Area'],
+                ['V = π×r²×h', 'Cylinder Volume']
+            ];
+
+            const isMatch = matches.some(([formula, shape]) => 
+                (card1.dataset.value === formula && card2.dataset.value === shape) ||
+                (card1.dataset.value === shape && card2.dataset.value === formula)
+            );
+
+            if (isMatch) {
+                card1.classList.add('matched');
+                card2.classList.add('matched');
+                memoryMatches++;
+                celebrateCorrect();
+            } else {
+                card1.classList.remove('flipped');
+                card2.classList.remove('flipped');
+                card1.innerHTML = '?';
+                card2.innerHTML = '?';
+            }
+
+            memoryFlippedCards = [];
+            updateMemoryScore();
+        }
+
+        // Quick quiz functions
+        const allQuizQuestions = [
+            {
+                question: "A horse pen is 12m long and 8m wide. What's the perimeter?",
+                options: ["40m", "96m", "20m", "32m"],
+                correct: 0
+            },
+            {
+                question: "A square stable has a perimeter of 24m. What's the area?",
+                options: ["36m²", "6m²", "144m²", "24m²"],
+                correct: 0
+            },
+            {
+                question: "A feed room is 6m×4m×3m. What's the volume?",
+                options: ["72m³", "48m³", "24m³", "36m³"],
+                correct: 0
+            },
+            {
+                question: "A circular arena has radius 8m. What's the perimeter? (π = 3.14)",
+                options: ["50.24m", "25.12m", "16m", "32m"],
+                correct: 0
+            },
+            {
+                question: "A triangular field has base 10m and height 6m. What's the area?",
+                options: ["30m²", "60m²", "16m²", "20m²"],
+                correct: 0
+            },
+            {
+                question: "A cylinder silo has radius 4m and height 10m. What's the volume? (π = 3.14)",
+                options: ["502.4m³", "251.2m³", "40m³", "160m³"],
+                correct: 0
+            }
+        ];
+
+        function generateQuizQuestion() {
+            const randomQ = allQuizQuestions[Math.floor(Math.random() * allQuizQuestions.length)];
+            document.getElementById('quizQuestion').innerHTML = randomQ.question;
+            
+            const optionsContainer = document.getElementById('quizOptions');
+            optionsContainer.innerHTML = '';
+            
+            randomQ.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.innerHTML = option;
+                optionDiv.onclick = () => checkQuizAnswer(optionDiv, index === randomQ.correct);
+                optionsContainer.appendChild(optionDiv);
+            });
+        }.contains('flipped') || card.classList.contains('matched')) return;
+            if (memoryFlippedCards.length >= 2) return;
+
+            card.classList.add('flipped');
+            card.innerHTML = card.dataset.value;
+            memoryFlippedCards.push(card);
+
+            if (memoryFlippedCards.length === 2) {
+                memoryTries++;
+                setTimeout(checkMemoryMatch, 1000);
+            }
+        }
+
+        function checkMemoryMatch() {
+            const [card1, card2] = memoryFlippedCards;
+            const isMatch = (
+                (card1.dataset.value === 'P = 2×(l+w)' && card2.dataset.value === 'Rectangle Perimeter') ||
+                (card1.dataset.value === 'Rectangle Perimeter' && card2.dataset.value === 'P = 2×(l+w)') ||
+                (card1.dataset.value === 'A = l×w' && card2.dataset.value === 'Rectangle Area') ||
+                (card1.dataset.value === 'Rectangle Area' && card2.dataset.value === 'A = l×w') ||
+                (card1.dataset.value === 'V = l×w×h' && card2.dataset.value === 'Volume') ||
+                (card1.dataset.value === 'Volume' && card2.dataset.value === 'V = l×w×h') ||
+                (card1.dataset.value === 'A = s²' && card2.dataset.value === 'Square Area') ||
+                (card1.dataset.value === 'Square Area' && card2.dataset.value === 'A = s²')
+            );
+
+            if (isMatch) {
+                card1.classList.add('matched');
+                card2.classList.add('matched');
+                memoryMatches++;
+                celebrateCorrect();
+            } else {
+                card1.classList.remove('flipped');
+                card2.classList.remove('flipped');
+                card1.innerHTML = '?';
+                card2.innerHTML = '?';
+            }
+
+            memoryFlippedCards = [];
+            updateMemoryScore();
+        }
+
+        function updateMemoryScore() {
+            document.getElementById('memoryScore').innerHTML = `Matches: ${memoryMatches} | Tries: ${memoryTries}`;
+        }
+
+        function resetMemoryGame() {
+            memoryMatches = 0;
+            memoryTries = 0;
+            memoryFlippedCards = [];
+            updateMemoryScore();
+            initializeMemoryGame();
+        }
+
+        // Quick quiz functions
+        const quizQuestions = [
+            {
+                question: "A horse pen is 12m long and 8m wide. What's the perimeter?",
+                options: ["40m", "96m", "20m", "32m"],
+                correct: 0
+            },
+            {
+                question: "A square stable has a perimeter of 24m. What's the area?",
+                options: ["36m²", "6m²", "144m²", "24m²"],
+                correct: 0
+            },
+            {
+                question: "A feed room is 6m×4m×3m. What's the volume?",
+                options: ["72m³", "48m³", "24m³", "36m³"],
+                correct: 0
+            }
+        ];
+
+        function generateQuizQuestion() {
+            const randomQ = quizQuestions[Math.floor(Math.random() * quizQuestions.length)];
+            document.getElementById('quizQuestion').innerHTML = randomQ.question;
+            
+            const optionsContainer = document.getElementById('quizOptions');
+            optionsContainer.innerHTML = '';
+            
+            randomQ.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.innerHTML = option;
+                optionDiv.onclick = () => checkQuizAnswer(optionDiv, index === randomQ.correct);
+                optionsContainer.appendChild(optionDiv);
+            });
+        }
+
+        function checkQuizAnswer(element, isCorrect) {
+            const options = element.parentElement.children;
+            Array.from(options).forEach(option => {
+                option.style.pointerEvents = 'none';
+            });
+            
+            if (isCorrect) {
+                element.classList.add('correct');
+                currentScore++;
+                celebrateCorrect();
+            } else {
+                element.classList.add('incorrect');
+            }
+            
+            currentQuestion++;
+            updateQuizScore();
+        }
+
+        function updateQuizScore() {
+            document.getElementById('quizScore').innerHTML = `Score: ${currentScore} | Question: ${currentQuestion}`;
+        }
+
+        // Animation functions
+        function animatePerimeter(element) {
+            element.style.border = '5px solid #FF6B6B';
+            element.innerHTML = '<div class="shape-info">Measuring around the edge!<br>P = 2×(l+w)</div>';
+            
+            setTimeout(() => {
+                element.style.border = '3px solid #2196F3';
+                element.innerHTML = '<div class="shape-info">Click me to see perimeter!</div>';
+            }, 2000);
+        }
+
+        function celebrateCorrect() {
+            // Add some celebration animation
+            document.body.style.background = 'linear-gradient(135deg, #FFD700 0%, #FF69B4 100%)';
+            setTimeout(() => {
+                document.body.style.background = 'linear-gradient(135deg, #87CEEB 0%, #90EE90 100%)';
+            }, 500);
+        }
+
+        function showEncouragement(messages) {
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            document.getElementById('encouragement').innerHTML = randomMessage;
+        }
+
+        // Initialize games when page loads
+        window.onload = function() {
+            initializeMemoryGame();
+            generateQuizQuestion();
+            
+            // Set up rotating encouragement messages
+            const encouragements = [
+                '🌟 You\'re doing amazing! Keep practicing! 🌟',
+                '🏇 Math is like riding - practice makes perfect! 🏇',
+                '🐎 Every horse started with one step! Keep going! 🐎',
+                '🎊 Learning is fun when you\'re having fun! 🎊'
+            ];
+            
+            setInterval(() => {
+                const randomMsg = encouragements[Math.floor(Math.random() * encouragements.length)];
+                document.getElementById('encouragement').innerHTML = randomMsg;
+            }, 5000);
+        };
+    </script>
+</body>
+</html>
